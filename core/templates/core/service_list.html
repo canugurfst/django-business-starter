@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block title %}Services · {{ site.site_name }}{% endblock %}
+{% block content %}
+<h1>Services</h1>
+{% if services %}
+  {% include "core/partials/service_cards.html" %}
+{% else %}
+  <p>No services listed yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block title %}{{ service.meta_title|default:service.title }} · {{ site.site_name }}{% endblock %}
+{% block content %}
+<article class="prose">
+  <p class="crumbs"><a href="{% url 'core:service_list' %}">Services</a></p>
+  <h1>{{ service.title }}</h1>
+  {% if service.image %}<img src="{{ service.image.url }}" alt="">{% endif %}
+  {{ service.body|linebreaks }}
+</article>
+{% endblock %}

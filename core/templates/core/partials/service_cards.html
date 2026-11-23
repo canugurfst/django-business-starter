@@ -1,0 +1,9 @@
+<ul class="cards">
+  {% for service in services %}
+  <li class="card">
+    {% if service.image %}<img src="{{ service.image.url }}" alt="" loading="lazy">{% endif %}
+    <h3><a href="{{ service.get_absolute_url }}">{{ service.title }}</a></h3>
+    <p>{{ service.summary }}</p>
+  </li>
+  {% endfor %}
+</ul>

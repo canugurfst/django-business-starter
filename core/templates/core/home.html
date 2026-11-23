@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>{{ site.site_name }}</h1>
+  {% if site.tagline %}<p class="lead">{{ site.tagline }}</p>{% endif %}
+</section>
+
+{% if services %}
+<section>
+  <h2>Services</h2>
+  {% include "core/partials/service_cards.html" %}
+</section>
+{% endif %}
+{% endblock %}
