@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ site.site_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site.default_meta_description }}{% endblock %}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.site_name }}">
+  <meta property="og:title" content="{% block og_title %}{{ site.site_name }}{% endblock %}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <script type="application/ld+json">{{ structured_data|safe }}</script>
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
   {% block head %}{% endblock %}
 </head>

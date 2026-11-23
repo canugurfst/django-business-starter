@@ -1,5 +1,7 @@
 {% extends "core/base.html" %}
 {% block title %}{{ service.meta_title|default:service.title }} · {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ service.meta_description|default:site.default_meta_description }}{% endblock %}
+{% block og_title %}{{ service.meta_title|default:service.title }}{% endblock %}
 {% block content %}
 <article class="prose">
   <p class="crumbs"><a href="{% url 'core:service_list' %}">Services</a></p>

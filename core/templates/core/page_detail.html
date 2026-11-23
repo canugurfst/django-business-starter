@@ -1,5 +1,7 @@
 {% extends "core/base.html" %}
 {% block title %}{{ page.meta_title|default:page.title }} · {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ page.meta_description|default:site.default_meta_description }}{% endblock %}
+{% block og_title %}{{ page.meta_title|default:page.title }}{% endblock %}
 {% block content %}
 <article class="prose">
   <h1>{{ page.title }}</h1>

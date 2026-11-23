@@ -48,12 +48,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     "core",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "core.middleware.CanonicalHostMiddleware",
+    "core.middleware.NoIndexMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -149,6 +152,17 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_HSTS_SECONDS", "3600"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool("DJANGO_HSTS_INCLUDE_SUBDOMAINS", False)
     SECURE_HSTS_PRELOAD = False
+
+# --------------------------------------------------------------------------
+# SEO
+# --------------------------------------------------------------------------
+# Public base URL, used for canonical links and structured data.
+# Empty = derive from the request (fine locally and on preview URLs).
+SITE_URL = os.environ.get("SITE_URL", "")
+# e.g. "example.com": www.example.com and other subdomains 301 to it.
+CANONICAL_HOST = os.environ.get("CANONICAL_HOST", "")
+# Keep search engines out of preview deployments. Turn off at launch.
+SITE_NOINDEX = env_bool("SITE_NOINDEX", False)
 
 # The admin lives at an env-configured path instead of the guessable /admin/.
 ADMIN_URL = os.environ.get("DJANGO_ADMIN_URL", "admin/").strip("/") + "/"
