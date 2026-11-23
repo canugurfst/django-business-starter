@@ -44,6 +44,9 @@ class SiteSettings(models.Model):
         return obj
 
 
+RESERVED_PAGE_SLUGS = {"services", "contact", "admin", "static", "media"}
+
+
 class PublishedQuerySet(models.QuerySet):
     def published(self):
         return self.filter(is_published=True)
@@ -82,6 +85,11 @@ class Page(SeoFields):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        # Pages live at /<slug>/, so they must not collide with fixed URLs.
+        if self.slug in RESERVED_PAGE_SLUGS:
+            raise ValidationError({"slug": f"'{self.slug}' is already used by the site. Choose another."})
+
     def get_absolute_url(self):
         return reverse("core:page_detail", args=[self.slug])
 
@@ -106,3 +114,22 @@ class Service(SeoFields):
 
     def get_absolute_url(self):
         return reverse("core:service_detail", args=[self.slug])
+
+
+class ContactMessage(models.Model):
+    """Every contact form submission is stored before the email is sent,
+    so a message is never lost if the email provider is down."""
+
+    name = models.CharField(max_length=120)
+    email = models.EmailField()
+    phone = models.CharField(max_length=40, blank=True)
+    message = models.TextField(max_length=5000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    email_sent = models.BooleanField(default=False)
+    is_handled = models.BooleanField(default=False, help_text="Tick once you have replied.")
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} <{self.email}>"

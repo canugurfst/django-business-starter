@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import reverse
 
-from .models import Page, Service, SiteSettings
+from .models import ContactMessage, Page, Service, SiteSettings
 
 admin.site.site_header = "Site administration"
 admin.site.site_title = "Site admin"
@@ -54,3 +54,17 @@ class ServiceAdmin(admin.ModelAdmin):
         ("Display", {"fields": ("is_published", "order")}),
         SEO_FIELDSET,
     )
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    """Inbox for form submissions: read-only except the 'handled' tick."""
+
+    list_display = ("name", "email", "created_at", "email_sent", "is_handled")
+    list_filter = ("is_handled", "email_sent")
+    list_editable = ("is_handled",)
+    search_fields = ("name", "email", "message")
+    readonly_fields = ("name", "email", "phone", "message", "created_at", "email_sent")
+
+    def has_add_permission(self, request):
+        return False

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
+    "anymail",
     "core",
 ]
 
@@ -163,6 +164,21 @@ SITE_URL = os.environ.get("SITE_URL", "")
 CANONICAL_HOST = os.environ.get("CANONICAL_HOST", "")
 # Keep search engines out of preview deployments. Turn off at launch.
 SITE_NOINDEX = env_bool("SITE_NOINDEX", False)
+
+# --------------------------------------------------------------------------
+# Email: printed to the console locally, sent through Postmark (via
+# django-anymail) when POSTMARK_SERVER_TOKEN is set.
+# --------------------------------------------------------------------------
+POSTMARK_SERVER_TOKEN = os.environ.get("POSTMARK_SERVER_TOKEN")
+if POSTMARK_SERVER_TOKEN:
+    EMAIL_BACKEND = "anymail.backends.postmark.EmailBackend"
+    ANYMAIL = {"POSTMARK_SERVER_TOKEN": POSTMARK_SERVER_TOKEN}
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "Website <website@example.com>")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# Where contact form notifications go.
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "")
 
 # The admin lives at an env-configured path instead of the guessable /admin/.
 ADMIN_URL = os.environ.get("DJANGO_ADMIN_URL", "admin/").strip("/") + "/"

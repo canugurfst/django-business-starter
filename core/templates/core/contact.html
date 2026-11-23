@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+{% block title %}Contact · {{ site.site_name }}{% endblock %}
+{% block og_title %}Contact {{ site.site_name }}{% endblock %}
+{% block content %}
+<h1>Contact</h1>
+
+{% for message in messages %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+
+<form method="post" class="form" novalidate>
+  {% csrf_token %}
+  {% for field in form %}
+    {% if field.name == "website" %}
+      <div class="hp" aria-hidden="true">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        <input type="text" name="website" id="{{ field.id_for_label }}" tabindex="-1" autocomplete="off">
+      </div>
+    {% else %}
+      <div>
+        <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+        {{ field }}
+        {{ field.errors }}
+      </div>
+    {% endif %}
+  {% endfor %}
+  <p><a href="{% url 'core:page_detail' 'privacy' %}">How we use your data</a></p>
+  <button type="submit">Send message</button>
+</form>
+{% endblock %}
