@@ -29,12 +29,13 @@ class Command(BaseCommand):
     help = "Create placeholder site settings, pages and services if they do not exist."
 
     def handle(self, *args, **options):
-        settings = SiteSettings.load()
-        if not settings.tagline:
-            settings.tagline = "A short line about what the business does."
-            settings.default_meta_description = "Example Business: placeholder description for search engines."
-            settings.email = "hello@example.com"
-            settings.save()
+        # Only fill site settings when creating them, so a field the owner
+        # deliberately cleared is not refilled on the next run.
+        SiteSettings.objects.get_or_create(pk=1, defaults={
+            "tagline": "A short line about what the business does.",
+            "default_meta_description": "Example Business: placeholder description for search engines.",
+            "email": "hello@example.com",
+        })
 
         created = 0
         for model, rows in ((Page, PAGES), (Service, SERVICES)):

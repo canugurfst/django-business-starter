@@ -67,10 +67,13 @@ class PageTests(SiteTestCase):
             page.full_clean()
 
     def test_seed_is_idempotent_and_keeps_edits(self):
+        from .models import SiteSettings
         Service.objects.filter(slug="consulting").update(title="Edited in admin")
+        SiteSettings.objects.filter(pk=1).update(tagline="")
         call_command("seed_demo", verbosity=0)
         self.assertEqual(Service.objects.count(), 2)
         self.assertEqual(Service.objects.get(slug="consulting").title, "Edited in admin")
+        self.assertEqual(SiteSettings.load().tagline, "")
 
 
 class SeoTests(SiteTestCase):
