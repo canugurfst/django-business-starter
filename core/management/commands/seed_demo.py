@@ -42,4 +42,5 @@ class Command(BaseCommand):
                 data = dict(row)
                 _, was_created = model.objects.get_or_create(slug=data.pop("slug"), defaults=data)
                 created += was_created
-        self.stdout.write(f"seed_demo: {created} item(s) created.")
+        if options["verbosity"]:
+            self.stdout.write(f"seed_demo: {created} item(s) created.")

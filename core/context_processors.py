@@ -6,7 +6,7 @@ from .models import Page, SiteSettings
 
 # Same escaping Django's json_script uses, so content typed in the admin
 # cannot close the <script> tag.
-_JSON_ESCAPES = {ord("<"): "\u003C", ord(">"): "\u003E", ord("&"): "\u0026"}
+_JSON_ESCAPES = {ord("<"): r"\u003C", ord(">"): r"\u003E", ord("&"): r"\u0026"}
 
 
 def site(request):
